@@ -1,0 +1,196 @@
+---
+title: "Working with R Packages"
+author: "Marieke Dirksen"
+date: "January 9, 2018"
+output:
+  html_document:
+    fig_caption: yes
+    highlight: tango
+    pandoc_args:
+    - --title-prefix
+    - Foo
+    - --id-prefix
+    - Bar
+    - --number-sections
+    theme: yeti
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+#themes: “default”, “cerulean”, “journal”, “flatly”, “readable”, “spacelab”, “united”, “cosmo”, “lumen”, “paper”, “sandstone”, “simplex”, “yeti"
+
+#rmarkdown::render("vignettes/Working_with_Rprojects.Rmd","html_document")
+```
+
+
+# Introduction
+During this tutorial the following topics are covered:
+
+* Create a new project, linked to GitHub
+* Writing and documenting functions in R
+* Raw data and data description
+* Document, build and reload your package
+* Writing a testthat function
+* Include your own code 
+
+Required packages for this tutorial:
+
+* devtools
+* roxygen2
+* testthat
+
+# Creating a new project
+Within a package the following components are included ( [Rpackages by Hadley Wickham](http://r-pkgs.had.co.nz)):
+
+* Code (R/)
+* Package metadata (DESCRIPTION)
+* Object documentation (man/)
+* Vignettes (vignettes/)
+* Testing (tests/)
+* Namespaces (NAMESPACE)
+* Data (data/)
+* Compiled code (src/)
+* Installed files (inst/)
+* Other components 
+
+> Challenge 2.1: Create a new Rstudio project and push the existing project to GitHub. What are the standard folders and files that are created?
+
+
+For an existing Rstudio project the following steps are required to conect it to GitHub (see the [online instructions](http://jennybc.github.io/2014-05-12-ubc/ubc-r/session2.4_github.html)):
+
+* Go to GitHub
+* Create a new repository (with the same name as your Rstudio project) without readme
+* Copy the two lines of code from the box labeled Push an existing repository from the command line (see below)
+* Open the Rstudio project and go to shell
+
+```{r, engine='bash',eval=FALSE}
+git remote add origin https://github.com/USERNAME/PROJECT.git
+git push -u origin master
+```
+
+> Challenge 2.2: Give your new package a title, description and author name. Commit your changes to GitHub. 
+
+# Writing and documenting functions in R
+
+Library's contain a specific set of function, e.g. plotting routines (`library(ggplot2)`), handling data tables (`library(data.table)`) or spatial data analysis (`library(raster)`). We use these functions all the time, e.g. `min`, `max`, `mean`. Using function can significantly reduce your code length and improve the reproducibility. If you are working on your own research project it is therefore convinient to store your functions in one place. 
+
+> Challenge 3.1: Check the code with `read.csv`. On which function does `read.csv` relay? 
+
+Below an example of a function in R:
+
+```{r}
+area_of_square<-function(length,width){
+  if(!inherits(length,"numeric") | !inherits(width,"numeric")) { #check if the input is numeric
+    message("Your length or width is not numeric")
+    return(FALSE)                                                # if the input is not numeric FALSE is returned 
+  } else {
+    area<-length*width                                           #calculating the area of the square
+    return(area)                                                 #returning the variable area
+  }
+    
+}
+
+```
+
+> Challenge 3.2: Run the example `area_of_square` and test the function with random numbers. What happens if you use `area_of_square('5','5')`? Save the function in the `/R` folder. 
+
+The function `read.csv` has a documentation page, which we can read typing `?read.csv`. It is very handy to check what all the variables mean and what the function does. So, we are also going to create a documentation page for our function. The documentation uses the following syntax: 
+
+```{r}
+#'
+#'@title Square area
+#'@description Function to calculate the area of a square. Requires numeric input. 
+#'@param length The length of the square 
+#'@param width The width of the square 
+#'@examples
+#'square_area(4,5)
+#'
+#'\dontrun{
+#'square_area(4,"5")}
+#'@author Marieke Dirksen
+#'@export
+#'
+
+area_of_square<-function(length,width){
+  if(!inherits(length,"numeric") | !inherits(width,"numeric")) { #check if the input is numeric
+    message("Your length or width is not numeric")
+    return(FALSE)                                                # if the input is not numeric FALSE is returned 
+  } else {
+    area<-length*width                                           #calculating the area of the square
+    return(area)                                                 #returning the variable area
+  }
+    
+}
+
+```
+
+> Challenge 4.2: Write and document a simple function. Create the documentation page use `devtools::document()`. Check your man/ folder, it should now contain a *.Rd file. Use the Install and Restart button under Build to attach the library. To test if your documentation works.
+
+>> Additional material: watch [youtube](https://www.youtube.com/watch?v=WK3_JAPP7ZM)
+
+# Raw data and data description
+
+Small datasets, like `data("iris")`, can be stored within a package. Similar to the functions this data is also documented: `?iris`. We are going to create our own dataset with lengths and widths from which we want to calculate the area. 
+
+```{r data}
+length<-runif(15,min=1,max=50)
+width<-runif(15,min=1,max=50)
+my.df<-data.frame("length"=length,"width"=width)
+
+devtools::use_data(my.df,overwrite=TRUE)
+```
+
+The documentation of the data looks similar to the function documentation, and is stored in `/R/data.R`:
+
+```{r data documentation}
+#' Lengths and widths
+#'
+#' This dataset contains random numerical values between 1 and 50
+#' 
+#'
+#' @format A data frame with 15 rows and 2 variables:
+#' \describe{
+#'   \item{length}{length of the square}
+#'   \item{width}{width of the square}
+#' }
+"my.df"
+
+```
+
+> Challenge 5.1: Write and document a dataset for the function you have writen previously. Use `devtools::use_data_raw()` to create the folder data-raw. Go to the folder and create a R scipt with the name dataraw.R. Use `devtools::use_data(my.df)` to write the data into the data folder. Use `devtool::document()` to update your documentation. 
+
+# Writing a testthat function
+During a project you change your functions. Sometimes you can make an error and it now longer works as planned...To avoid wrong changes it is good practice to write a test function. Use `devtools::use_testthat()`, the folders `tests` and `tests/testthat` are created. Additionally a script called `testthat.R` is created, which will run all your tests. 
+
+```{r, eval=FALSE}
+context("equal test")
+test_that("area_of_square",{
+expect_equal(area_of_square(3,4),12)
+})
+```
+
+> Challenge 7.2: Make a different test function for the function you have written. Create a Rscript in the folder `tests/testthat`, starting with the name `test`, add the code below and see if the function passes the test. Check [this page](http://r-pkgs.had.co.nz/tests.html) for tips.
+
+> Challenge 7.3: Commit and push your project to GitHub. Go to the tab `Git`.
+
+>> Additional material: additional [instructions](https://tgmstat.wordpress.com/2013/06/26/devtools-and-testthat-r-packages/)). For background information check out the [R journal on testthat](https://journal.r-project.org/archive/2011-1/RJournal_2011-1_Wickham.pdf)
+
+# Include your own code
+
+> Challenge 8.1: Write and document your own function. Does your function depend on other library's? Add Imports to the DESCRIPTION file (documented [here](http://r-pkgs.had.co.nz/description.html) )
+
+> Challenge 8.2: Write the documentation of your own function and add the documentation to your package. 
+
+> Challenge 8.3: Create a Rdataset with function input.
+
+> Challenge 8.3: Make one or more tests for this function. 
+
+> Challenge 8.4: Commit the changes you made and push the project to GitHub. 
+
+>> Additional challenge 1: Help one of your classmates with his/her code. Hint: Fork the GitHub repo. 
+
+>> Additional challenge 2: It is a good practice to keep a README file. Look at the example [from the R's markdown package](https://github.com/rstudio/rmarkdown) and look at the [instructions](http://stat545.com/packages05_foofactors-package-02.html#use-readme.rmd). Edit the README.md file for this package.  
+
+>> Additional reading: We have not covered all the package components, feel free to read more about them [online ](http://r-pkgs.had.co.nz), or check the [online support](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects)

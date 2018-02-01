@@ -1,0 +1,119 @@
+---
+title: "Introduction to rmarkdown"
+author: "Kirien Whan"
+date: "January 26, 2018"
+output:
+  ioslides_presentation: default
+  beamer_presentation:
+    latex_engine: xelatex
+  slidy_presentation: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+<!-- http://benmarwick.github.io/UW-eScience-reproducibility-social-sciences/#/12 -->
+
+## What is R Markdown
+
+* R Markdown is a file format for making dynamic documents with R
+    * A mix text and R code together in one document
+      * Knit the document = execute code and compile the document
+    * A text file that can be tracked by git
+    * User-friendly (compared to LaTeX) but still powerful
+* Written in markdown, but can include HTML, LaTeX and R code
+
+## What is R Markdown
+
+<center><img src="exampleRMD.png" width="1000"><center>
+
+## Why R Markdown?
+1. Reproducable research 
+    * Mouse clicking is not reproducable
+    * Copying and pasting R output from text files to documents is not reproducable
+
+<br>
+You when you start your project:
+<center><img src="baby_computer.jpeg" width="400"><center
+<br>
+
+## Why R Markdown?
+1. Reproducable research 
+    * Mouse clicking is not reproducable
+    * Copying and pasting R output from text files to documents is not reproducable
+
+After getting the second round of revisions back:
+<br>
+<center><img src="no_memory.png" width="300"><center
+<br>
+
+## Why R Markdown?
+1. Reproducable research 
+    * Mouse clicking is not reproducable
+    * Copying and pasting R output from text files to documents is not reproducable
+    * A work flow that forces me to make things more reproducable
+
+<center><img src="dog_add_commentslater.jpg" width="350"><center>
+
+<br>
+
+
+## Why R Markdown?
+2. Version control 
+    * text file that can be tracked by git
+
+<center><img src="phdcomics_final.gif" width="300" ><center>
+
+
+## Why R Markdown?
+2. Version control 
+    * text file that can be tracked by git
+    * this is embarrassing
+
+<center><img src="Whan_badVC.png" width="300" title="Well this is embarrassing..."><center>
+
+"
+
+## Why this work flow?
+* One of many possible work flows to achieve those goals - knitr, sweave, latex with a master script
+    * Anything to avoid clicking the mouse
+* Choose whatever works for you!
+
+<br>
+<br>
+<center><img src="cat_choices.gif" align="middle"></center>
+
+
+
+## Why this work flow?
+* rmarkdown is:
+    * easy to learn with lots of support from RStudio
+    * able to include LaTeX or HTML code
+    * creates PDF and HTML output (and Word)
+    * keep the tex file for journal submission
+
+<center><img src="microsoft_word.jpg" align="middle"></center>
+
+## Some things could be better
+
+* including journal templates
+* this cats jumping skills
+* issues with pandoc
+
+<center><img src="cat_jump.gif" align="middle"></center>
+
+## Cool features
+
+- Everything is in one document
+- Call external scripts
+- Caching
+- Make PDF or HTML presentations (beamer, isolides, slidy)
+- Easy to include:
+    - references
+    - equations
+    - lists
+    - figures
+    - cross-references
+    - tables
+    - actual r code

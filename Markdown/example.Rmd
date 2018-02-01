@@ -1,0 +1,125 @@
+---
+title: "Ground breaking research!"
+author: |
+  | Kirien Whan$^1$ and Famous Collaborators$^2$
+  | 1. KNMI
+  | 2. University
+date: "January 25, 2018"
+output:
+  pdf_document:
+    includes:
+      in_header: extra_texinfo.tex
+    keep_tex: yes
+    number_sections: no
+  html_document: default
+bibliography: Your.bib
+abstract: |
+  The abstract text goes here....
+---
+
+<!-- 
+You can include comments.
+
+I downloaded data from: www.data.com
+
+I preprocessed it with the script: ./dddd/
+
+To render this document: 
+R --no-save --no-restore -e "require(rmarkdown); render('example.Rmd')"
+
+-->
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval=TRUE,include=TRUE, fig.width = 6, fig.height = 4, 
+                      cache=TRUE, warnings=FALSE)
+
+options(figcap.prefix = "Figure", figcap.sep = ":", figcap.prefix.highlight="**")
+options(tabcap.prefix = "Table", tabcap.sep = ":", tabcap.prefix.highlight="**")
+
+```
+
+
+```{r global_options, include=FALSE}
+library(ggplot2)
+library(xtable)
+
+source("functions_markdownCrossRef.R")
+
+source("./example_script.r")
+
+```
+
+```{r importData, include=FALSE}
+
+ENSO <- rnorm(50, 0, 3)
+
+temp <- rnorm(50, 25, 10)
+
+
+```
+
+```{r calcCorrel, include=FALSE}
+
+ensoCor <- cor(ENSO, temp, use="complete.obs")
+  
+  
+```
+
+
+```{r calcLEN, include=FALSE}
+# Do some other calculations:
+len <- length(ENSO)
+
+```
+
+
+# Introduction
+
+Citing my own work [@whan2015impact]. Can also use latex citations, but then you need to run bibtex etc \citep{whan2015impact}.
+
+# Data and Methods
+
+You can call R directly in-line like this, e.g. We use `r length(ENSO)` years of data. Or you can call objects that have been defined in previous chunks like this, e.g. We use `r len` years of data. 
+
+Including latex code directly is easy using dollar signs, e.g. The Ni&#241;o 3.4 index is the area averaged standardized SST anomalies from the tropical Pacific (5$^{\circ}$N-5$^{\circ}$S, 170$^{\circ}$W-120$^{\circ}$W)
+
+Referencing equations is easy as well since we can include latex code directly. See equation @eq1:
+
+(@eq1) $$  ONETHING  = \max\limits_{j=1,..k}[OF.SOME.OTHER.THINGS] $$
+
+# Results
+
+There are built in ways to do figure cross-referencing, but I found this method best (using functions imported from the script "functions_markdownCrossRef.R") (`r figRef("CorPlot")`). Referencing tables is done like this (`r tabRef("xtable_table1")`).
+
+We find a relationship between ENSO and temperature (r = `r round(ensoCor, 2)`).
+
+# Conclusions
+
+# References
+
+
+```{r table1, results="asis", include=FALSE}
+
+# I use xtable for including tables:
+  Tabdf <- data.frame(Name=c("cor1", "cor2"),
+		     Resolution = c(round(ensoCor, 2), 0.8))
+  colnames(Tabdf) <- c("Name", "Correlation") 
+  tabcap <- "A table caption"
+  Tabout <- xtable(Tabdf, caption=tabcap, digits=2)
+  align(Tabout) <- "lcc"
+  print(Tabout, comment=F, caption.placement = 'top', include.rownames=FALSE)
+  
+```
+
+
+
+```{r makeplot, echo=FALSE, fig.cap=figRef("CorPlot", "The Correlation between ENSO and Temp")}
+
+aplot <- ggplot(data=data.frame(temp, ENSO)) +
+geom_line(aes(x=ENSO, y=temp))  
+
+aplot
+
+```
+

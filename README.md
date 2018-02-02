@@ -1,6 +1,10 @@
 # Masterclass
 Course material from the SENSE Masterclass Git, GitHub and Markdown in a R-environment on 26-01-2018
 
+## html
+
+All the markdown documents from the course are converted to html files. 
+
 ## Markdown
 
 * `Introduction_To_Rmd.Rmd`: The rmarkdown document to make the presentation (you need the folder of memes to knit this file)

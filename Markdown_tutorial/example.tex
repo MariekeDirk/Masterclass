@@ -75,9 +75,9 @@
   \title{Ground breaking research!}
   \pretitle{\vspace{\droptitle}\centering\huge}
   \posttitle{\par}
-  \author{``Kirien Whan\(^1\)'' and Issac Newton\(^2\)\\
+  \author{Kirien Whan\(^1\) and Famous Collaborators\(^2\)\\
 1. KNMI\\
-2. University of Cambridge}
+2. University}
   \preauthor{\centering\large\emph}
   \postauthor{\par}
   \predate{\centering\large\emph}
@@ -101,19 +101,55 @@ The abstract text goes here\ldots{}.
 
 \section{Introduction}\label{introduction}
 
+Citing my own work (Whan et al. 2015). Can also use latex citations, but
+then you need to run bibtex etc \citep{whan2015impact}.
+
 \section{Data and Methods}\label{data-and-methods}
+
+You can call R directly in-line like this, e.g.~We use 50 years of data.
+Or you can call objects that have been defined in previous chunks like
+this, e.g.~We use 50 years of data.
+
+Including latex code directly is easy using dollar signs, e.g.~The Niño
+3.4 index is the area averaged standardized SST anomalies from the
+tropical Pacific (5\(^{\circ}\)N-5\(^{\circ}\)S,
+170\(^{\circ}\)W-120\(^{\circ}\)W)
+
+Referencing equations is easy as well since we can include latex code
+directly. See equation 1:
+
+\begin{enumerate}
+\def\labelenumi{(\arabic{enumi})}
+\tightlist
+\item
+  \[  ONETHING  = \max\limits_{j=1,..k}[OF.SOME.OTHER.THINGS] \]
+\end{enumerate}
 
 \section{Results}\label{results}
 
-In Figure 1 we see a line.
+There are built in ways to do figure cross-referencing, but I found this
+method best (using functions imported from the script
+``functions\_markdownCrossRef.R'') (Figure 1). Referencing tables is
+done like this (Table 1).
+
+We find a relationship between ENSO and temperature (r = 0.1).
 
 \section{Conclusions}\label{conclusions}
+
+\section{References}\label{references}
 
 \begin{figure}
 \centering
 \includegraphics{example_files/figure-latex/makeplot-1.pdf}
 \caption{The Correlation between ENSO and Temp}
 \end{figure}
+
+\hypertarget{refs}{}
+\hypertarget{ref-whan2015impact}{}
+Whan, Kirien, Jakob Zscheischler, Rene Orth, Mxolisi Shongwe, Mohammad
+Rahimi, Ernest O Asare, and Sonia I Seneviratne. 2015. ``Impact of Soil
+Moisture on Extreme Maximum Temperatures in Europe.'' \emph{Weather and
+Climate Extremes} 9. Elsevier: 57--67.
 
 
 \end{document}

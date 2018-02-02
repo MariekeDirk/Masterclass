@@ -3,6 +3,7 @@ title: "Working with R Packages"
 author: "Marieke Dirksen"
 date: "January 9, 2018"
 output:
+  pdf_document: default
   html_document:
     fig_caption: yes
     highlight: tango
@@ -13,7 +14,6 @@ output:
     - Bar
     - --number-sections
     theme: yeti
-  pdf_document: default
   word_document: default
 ---
 
@@ -21,7 +21,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 #themes: “default”, “cerulean”, “journal”, “flatly”, “readable”, “spacelab”, “united”, “cosmo”, “lumen”, “paper”, “sandstone”, “simplex”, “yeti"
 
-#rmarkdown::render("vignettes/Working_with_Rprojects.Rmd","html_document")
+#rmarkdown::render("Working_with_Rprojects.Rmd","html_document")
 ```
 
 
